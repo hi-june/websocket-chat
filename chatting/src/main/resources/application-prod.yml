@@ -1,0 +1,6 @@
+spring:
+  redis:
+    host: #
+    port: #
+stomp:
+  allowed-origin-pattern: #
