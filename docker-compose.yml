@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  chat_server:
+    container_name: chat_server
+    build:
+      context: ./chatting
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - chatting_service
+    depends_on:
+      - redis
+
+  redis:
+    container_name: chat_room
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
+    labels:
+      - "name=chat_room"
+      - "mode=standalone"
+    restart: always
+    networks:
+      - chatting_service
+    command: redis-server /usr/local/conf/redis.conf
+
+networks:
+  chatting_service:
+    driver: bridge
